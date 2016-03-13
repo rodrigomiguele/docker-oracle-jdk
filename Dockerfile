@@ -1,23 +1,19 @@
-FROM alpine
+FROM debian
 
 ENV HOME /root
 
-RUN mkdir /opt
+RUN apt-get update \
+    && apt-get install -y curl
 
-COPY glibc-2.21-r2.apk $HOME
-
-RUN apk add --update libgcc && \
-    cd $HOME && \
-    apk add --allow-untrusted glibc-2.21-r2.apk && \
-    rm -f glibc-2.21-r2.apk && \
-    apk info --purge
-
-COPY jdk-6u45-linux-x64.bin /opt/
+ENV JDK_URL 'http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz'
 
 RUN cd /opt && \
-    ./jdk-6u45-linux-x64.bin && \
-    rm -f jdk-6u45-linux-x64.bin && \
-    mv jdk* jdk
+    curl -L -O -H "Cookie: oraclelicense=accept-securebackup-cookie" -k $JDK_URL && \
+    tar -xzf jdk-*.tar.gz && rm -f jdk-*.tar.gz && \
+    mv jdk* jdk && \
+    AUTO_ADDED_PACKAGES=`apt-mark showauto`
+    apt-get remove --purge -y curl $AUTO_ADDED_PACKAGES && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME /opt/jdk
 
