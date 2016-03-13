@@ -2,22 +2,22 @@ FROM alpine
 
 ENV HOME /root
 
-RUN apk add --update curl && \ 
-    mkdir /opt
+RUN mkdir /opt
 
 COPY glibc-2.21-r2.apk $HOME
 
-RUN cd $HOME && \
+RUN apk add --update libgcc && \
+    cd $HOME && \
     apk add --allow-untrusted glibc-2.21-r2.apk && \
-    rm -f glibc-2.21-r2.apk
+    rm -f glibc-2.21-r2.apk && \
+    apk info --purge
 
-ENV JDK_URL 'http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz'
+COPY jdk-6u45-linux-x64.bin /opt/
 
 RUN cd /opt && \
-    curl -L -O -H "Cookie: oraclelicense=accept-securebackup-cookie" -k $JDK_URL && \
-    tar -xzf jdk-*.tar.gz && rm -f jdk-*.tar.gz && \
-    mv jdk* jdk && \
-    apk del --purge curl
+    ./jdk-6u45-linux-x64.bin && \
+    rm -f jdk-6u45-linux-x64.bin && \
+    mv jdk* jdk
 
 ENV JAVA_HOME /opt/jdk
 
