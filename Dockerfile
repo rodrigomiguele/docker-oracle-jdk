@@ -1,15 +1,9 @@
-FROM alpine
+FROM frolvlad/alpine-glibc
 
 ENV HOME /root
 
 RUN apk add --update curl && \ 
     mkdir /opt
-
-COPY glibc-2.21-r2.apk $HOME
-
-RUN cd $HOME && \
-    apk add --allow-untrusted glibc-2.21-r2.apk && \
-    rm -f glibc-2.21-r2.apk
 
 ENV JDK_URL 'http://download.oracle.com/otn-pub/java/jdk/8u73-b02/jdk-8u73-linux-x64.tar.gz'
 
