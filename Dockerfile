@@ -1,4 +1,4 @@
-FROM alpine
+FROM frolvlad/alpine-glibc
 
 ENV JDK_URL 'http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz'
 
