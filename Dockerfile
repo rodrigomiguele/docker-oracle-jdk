@@ -1,7 +1,5 @@
 FROM frolvlad/alpine-glibc
 
-ENV HOME /root
-
 RUN apk add --update curl && \ 
     mkdir /opt
 
